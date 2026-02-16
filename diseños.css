@@ -165,6 +165,35 @@
     .btn-modify:active {
       transform: translateY(-1px);
     }
+    /* Botón de inicio con estilo morado */
+    .btn-home {
+      background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(86, 58, 150, 0.35);
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+    }
+
+    /* Hover elegante */
+    .btn-home:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 12px 28px rgba(86, 58, 150, 0.45);
+      background: linear-gradient(135deg, var(--dark-purple), var(--accent-purple));
+      color: white;
+    }
+
+    /* Click */
+    .btn-home:active {
+      transform: translateY(-1px) scale(0.98);
+    }
     
     /* Ajustes para móviles */
     @media (max-width: 768px) {
@@ -175,6 +204,12 @@
       .main-card {
         padding: 15px;
         border-radius: 20px;
+      }
+
+      .btn-home {
+        width: 52px;
+        height: 52px;
+        font-size: 1.2rem;
       }
       
       .title-section {

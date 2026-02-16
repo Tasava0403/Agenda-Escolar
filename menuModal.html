@@ -1,0 +1,63 @@
+<!-- Modal menú desplegable -->
+<div class="modal fade" id="modalMenu" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog m-0" style="position: fixed; top: 10px; left: 10px; width: 220px;">
+    <div class="modal-content shadow" style="border-radius: 12px;">
+
+      <!-- Encabezado -->
+      <div class="modal-header py-2"
+           style="background-color: #8f43e6; border-bottom: none;">
+        <h6 class="modal-title text-white w-100 text-center">Menú</h6>
+
+        <button type="button"
+                class="btn-close btn-close-white position-absolute end-0 me-2"
+                data-bs-dismiss="modal">
+        </button>
+      </div>
+
+      <!-- Botones -->
+      <div class="modal-body p-2">
+
+        <button class="btn w-100 text-start mb-2 menu-btn"
+                onclick="window.location.href='MuestraHorario.html'">
+          📅 Horario
+        </button>
+
+        <button class="btn w-100 text-start mb-2 menu-btn"
+                onclick="window.location.href=''">
+          👤 Perfil
+        </button>
+
+        <button class="btn w-100 text-start mb-2 menu-btn"
+                onclick="window.location.href=''">
+          📝 Tareas
+        </button>
+
+        <a href="calendario.html" class="btn w-100 text-start mb-3 menu-btn">
+          🗓️ Calendario
+        </a>
+
+        <!-- Botón cerrar -->
+        <button class="btn btn-secondary w-100" data-bs-dismiss="modal" style="background-color: #8f43e6">
+          Cerrar
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .menu-btn {
+    background-color: #f4f1ff;
+    color: #3E34CA;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: 0.2s;
+  }
+
+  .menu-btn:hover {
+    background-color: #8f43e6;
+    color: white;
+  }
+</style>

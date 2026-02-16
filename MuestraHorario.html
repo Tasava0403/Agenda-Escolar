@@ -12,6 +12,11 @@
 
 <body>
   <div class="main-card">
+    
+    <div id="menu-container"></div>
+    <button class="btn-home" data-bs-toggle="modal"  data-bs-target="#modalMenu">
+      🏠
+    </button>
     <!-- Título principal -->
     <div class="title-section text-center">
       <h2>📚 HORARIO ESCOLAR</h2>
@@ -108,5 +113,12 @@
   
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    fetch("../menuModal.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("menu-container").innerHTML = html;
+    });
+  </script>
 </body>
 </html>

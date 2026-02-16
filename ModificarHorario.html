@@ -14,7 +14,10 @@
 <body>
 
   <div class="main-card">
-
+    <div id="menu-container"></div>
+    <button class="btn-home" data-bs-toggle="modal"  data-bs-target="#modalMenu">
+      🏠
+    </button>
     <div class="title-section">
       <h2>📚HORARIO ACTUAL</h2>
     </div>
@@ -191,11 +194,17 @@
     });
   });
 
-  fetch("modal.html")
+  fetch("../modal.html")
     .then(res => res.text())
     .then(html => {
       document.getElementById("contenedorModal").innerHTML = html;
   });
+
+  fetch("../menuModal.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("menu-container").innerHTML = html;
+    });
 
   function mostrarModal(mensaje) {
     const modalElement = document.getElementById('modalMensaje');
