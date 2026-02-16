@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario de Eventos</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <style>
+    /* TUS VARIABLES DE COLOR ORIGINALES */
+    :root {
+      --primary-purple: #6B46C1;
+      --light-purple: #89e2ba;
+      --dark-purple: #553C9A;
+      --soft-lavender: #E9D8FD;
+      --bg-gradient-start: #E9D8FD;
+      --bg-gradient-end: #92E0BD;
+      --accent-purple: #805AD5;
+    }
+    
+    body {
+      background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+      min-height: 100vh;
+      padding: 16px;
+      margin: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    
+    /* CONTENEDOR PRINCIPAL */
+    .main-card {
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(5px);
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(86, 58, 150, 0.25);
+      padding: 20px;
+      margin: 0 auto;
+      max-width: 1400px;
+      border: 1px solid rgba(159, 122, 234, 0.3);
+    }
+    
+    /* ENCABEZADO */
+    .title-section {
+      background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
+      border-radius: 18px;
+      padding: 25px 15px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 20px rgba(86, 58, 150, 0.3);
+      text-align: center;
+    }
+    
+    .title-section h2 {
+      color: white;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      margin: 0;
+      font-size: clamp(1.5rem, 5vw, 2.2rem);
+    }
+    
+    .title-section p {
+      color: rgba(255, 255, 255, 0.9);
+      margin: 8px 0 0 0;
+    }
+    
+    /* TARJETAS */
+    .custom-card {
+      background-color: white;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(86, 58, 150, 0.15);
+      border: 2px solid var(--soft-lavender);
+      margin-bottom: 20px;
+    }
+    
+    .custom-card-header {
+      background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
+      color: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+    }
+    
+    /* MINI CALENDARIO */
+    .mini-calendar table {
+      width: 100%;
+    }
+    
+    .mini-calendar th {
+      color: var(--dark-purple);
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 8px 4px;
+    }
+    
+    .mini-calendar td {
+      padding: 8px 4px;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s;
+      color: var(--dark-purple);
+    }
+    
+    .mini-calendar td:hover {
+      background-color: var(--soft-lavender);
+    }
+    
+    .mini-calendar .today {
+      background: linear-gradient(135deg, var(--primary-purple), var(--accent-purple));
+      color: white;
+      font-weight: 700;
+      border-radius: 50%;
+    }
+    
+    .mini-calendar .has-event {
+      background-color: var(--light-purple);
+      font-weight: 600;
+    }
+    
+    /* FORMULARIOS */
+    .custom-label {
+      display: block;
+      font-weight: 600;
+      color: var(--dark-purple);
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+    
+    .custom-input,
+    .custom-select {
+      border-radius: 12px;
+      border: 2px solid var(--soft-lavender);
+      padding: 10px 12px;
+      transition: all 0.25s ease;
+      width: 100%;
+    }
+    
+    .custom-input:focus,
+    .custom-select:focus {
+      border-color: var(--primary-purple);
+      box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.15);
+      outline: none;
+    }
+    
+    /* BOTONES */
+    .btn-purple {
+      background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(86, 58, 150, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn-purple:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(86, 58, 150, 0.4);
+      background: linear-gradient(135deg, var(--dark-purple), var(--primary-purple));
+      color: white;
+    }
+    
+    .btn-purple:active {
+      transform: translateY(-1px);
+    }
+    
+    .btn-purple-outline {
+      background: white;
+      color: var(--primary-purple);
+      border: 2px solid var(--primary-purple);
+      padding: 10px 25px;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-purple-outline:hover {
+      background: var(--primary-purple);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(86, 58, 150, 0.3);
+    }
+    
+    .btn-group-purple .btn {
+      border: 2px solid var(--soft-lavender);
+      color: var(--dark-purple);
+      background: white;
+      font-size: 0.85rem;
+      padding: 8px 16px;
+      font-weight: 500;
+    }
+    
+    .btn-group-purple .btn.active {
+      background: linear-gradient(135deg, var(--primary-purple), var(--accent-purple));
+      color: white;
+      border-color: var(--primary-purple);
+    }
+    
+    /* TABLA DE CALENDARIO */
+    .calendar-table {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(86, 58, 150, 0.15);
+    }
+    
+    .calendar-table thead th {
+      background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      padding: 15px 8px;
+      border: none;
+      text-align: center;
+    }
+    
+    .calendar-table tbody td {
+      padding: 8px;
+      vertical-align: top;
+      border: 1px solid var(--soft-lavender);
+      min-height: 80px;
+      position: relative;
+    }
+    
+    .calendar-table .time-cell {
+      background-color: rgba(233, 216, 253, 0.3);
+      font-weight: 700;
+      color: var(--dark-purple);
+      text-align: center;
+      font-size: 0.85rem;
+      width: 70px;
+    }
+    
+    /* EVENTOS EN CALENDARIO */
+    .event-block {
+      background: linear-gradient(135deg, rgba(107, 70, 193, 0.9), rgba(128, 90, 213, 0.9));
+      color: white;
+      padding: 8px 10px;
+      border-radius: 10px;
+      margin: 2px 0;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(107, 70, 193, 0.3);
+      border-left: 4px solid var(--light-purple);
+    }
+    
+    .event-block:hover {
+      transform: translateX(3px);
+      box-shadow: 0 4px 12px rgba(107, 70, 193, 0.4);
+    }
+    
+    .event-block strong {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+    }
+    
+    .event-block small {
+      font-size: 0.75rem;
+      opacity: 0.95;
+    }
+    
+    .event-materia1 {
+      background: linear-gradient(135deg, #6B46C1, #805AD5);
+      border-left-color: #E9D8FD;
+    }
+    
+    .event-materia2 {
+      background: linear-gradient(135deg, #48BB78, #38A169);
+      border-left-color: #9AE6B4;
+    }
+    
+    .event-materia3 {
+      background: linear-gradient(135deg, #ED8936, #DD6B20);
+      border-left-color: #FBD38D;
+    }
+    
+    /* TABLA DE EVENTOS */
+    .events-table {
+      margin-bottom: 0;
+    }
+    
+    .events-table thead th {
+      background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      padding: 12px 10px;
+      border: none;
+    }
+    
+    .events-table tbody td {
+      padding: 12px 10px;
+      vertical-align: middle;
+      border-bottom: 2px solid var(--soft-lavender);
+      font-size: 0.9rem;
+    }
+    
+    .events-table tbody tr:hover {
+      background-color: rgba(233, 216, 253, 0.3);
+    }
+    
+    /* BADGES */
+    .badge-purple {
+      background: linear-gradient(135deg, var(--primary-purple), var(--accent-purple));
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      box-shadow: 0 2px 6px rgba(107, 70, 193, 0.2);
+    }
+    
+    .badge-materia1 {
+      background: linear-gradient(135deg, #6B46C1, #805AD5);
+    }
+    
+    .badge-materia2 {
+      background: linear-gradient(135deg, #48BB78, #38A169);
+    }
+    
+    .badge-materia3 {
+      background: linear-gradient(135deg, #ED8936, #DD6B20);
+    }
+    
+    .badge-clase {
+      background: linear-gradient(135deg, #667EEA, #764BA2);
+    }
+    
+    /* RESUMEN DE EVENTOS */
+    .event-summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--soft-lavender);
+    }
+    
+    .event-summary-item:last-child {
+      border-bottom: none;
+    }
+    
+    .event-summary-badge {
+      background: linear-gradient(135deg, var(--primary-purple), var(--accent-purple));
+      color: white;
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    
+    /* MODAL PERSONALIZADO */
+    .modal-content {
+      border-radius: 20px;
+      border: 2px solid var(--soft-lavender);
+      box-shadow: 0 20px 50px rgba(86, 58, 150, 0.3);
+    }
+    
+    .modal-header {
+      background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
+      color: white;
+      border-radius: 18px 18px 0 0;
+      padding: 20px 25px;
+      border: none;
+    }
+    
+    .modal-title {
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    
+    .modal-body {
+      padding: 25px;
+    }
+    
+    .modal-footer {
+      border-top: 2px solid var(--soft-lavender);
+      padding: 20px 25px;
+    }
+    
+    .btn-close-white {
+      filter: brightness(0) invert(1);
+    }
+    
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      body {
+        padding: 8px;
+      }
+      
+      .main-card {
+        padding: 15px;
+        border-radius: 20px;
+      }
+      
+      .title-section {
+        padding: 20px 10px;
+      }
+      
+      .calendar-table {
+        font-size: 0.85rem;
+      }
+      
+      .btn-purple {
+        width: 100%;
+        padding: 10px 20px;
+      }
+    }
+    
+    /* SCROLL PERSONALIZADO */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: var(--soft-lavender);
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, var(--primary-purple), var(--accent-purple));
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--dark-purple);
+    }
+    </style>
+</head>
+<body>
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="main-card">
+        <!-- ENCABEZADO -->
+        <div class="title-section">
+            <h2><i class="bi bi-calendar3"></i> Calendario de Eventos</h2>
+            <p>Gestiona tus clases y eventos académicos</p>
+        </div>
+
+        <div class="row">
+            <!-- BARRA LATERAL -->
+            <div class="col-lg-3 col-md-4 mb-4">
+                <!-- Mini Calendario -->
+                <div class="custom-card">
+                    <div class="custom-card-header d-flex justify-content-between align-items-center">
+                        <button class="btn btn-sm btn-light" onclick="mesAnterior()">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <span>Febrero 2026</span>
+                        <button class="btn btn-sm btn-light" onclick="mesSiguiente()">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="mini-calendar">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>D</th>
+                                    <th>L</th>
+                                    <th>M</th>
+                                    <th>M</th>
+                                    <th>J</th>
+                                    <th>V</th>
+                                    <th>S</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                    <td>4</td>
+                                    <td>5</td>
+                                    <td>6</td>
+                                    <td>7</td>
+                                </tr>
+                                <tr>
+                                    <td>8</td>
+                                    <td class="has-event">9</td>
+                                    <td class="has-event">10</td>
+                                    <td>11</td>
+                                    <td>12</td>
+                                    <td class="has-event">13</td>
+                                    <td>14</td>
+                                </tr>
+                                <tr>
+                                    <td class="today">15</td>
+                                    <td>16</td>
+                                    <td>17</td>
+                                    <td>18</td>
+                                    <td>19</td>
+                                    <td>20</td>
+                                    <td>21</td>
+                                </tr>
+                                <tr>
+                                    <td>22</td>
+                                    <td>23</td>
+                                    <td>24</td>
+                                    <td>25</td>
+                                    <td>26</td>
+                                    <td>27</td>
+                                    <td>28</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Filtros -->
+                <div class="custom-card">
+                    <div class="custom-card-header">
+                        <i class="bi bi-funnel"></i> Filtrar Eventos
+                    </div>
+                    <form id="filtroForm">
+                        <div class="mb-3">
+                            <label class="custom-label">Por Materia:</label>
+                            <select class="custom-select" id="filtroMateria">
+                                <option value="">Todas las materias</option>
+                                <option value="materia1">Clase Materia 1</option>
+                                <option value="materia2">Clase Materia 2</option>
+                                <option value="materia3">Clase Materia 3</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="custom-label">Por Tipo:</label>
+                            <select class="custom-select" id="filtroTipo">
+                                <option value="">Todos los tipos</option>
+                                <option value="clase">Clase</option>
+                                <option value="examen">Examen</option>
+                                <option value="tarea">Tarea</option>
+                                <option value="evento">Evento especial</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn-purple w-100" onclick="aplicarFiltros()">
+                            <i class="bi bi-check-circle"></i> Aplicar
+                        </button>
+                        <button type="reset" class="btn-purple-outline w-100 mt-2">
+                            <i class="bi bi-x-circle"></i> Limpiar
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Resumen -->
+                <div class="custom-card">
+                    <div class="custom-card-header">
+                        <i class="bi bi-info-circle"></i> Resumen
+                    </div>
+                    <div class="event-summary-item">
+                        <span>Total eventos:</span>
+                        <span class="event-summary-badge">4</span>
+                    </div>
+                    <div class="event-summary-item">
+                        <span>Esta semana:</span>
+                        <span class="event-summary-badge">4</span>
+                    </div>
+                    <div class="event-summary-item">
+                        <span>Próximo:</span>
+                        <span class="event-summary-badge">Lun 8:00</span>
+                    </div>
+                </div>
+
+                <!-- Botón Agregar -->
+                <button class="btn-purple w-100 mt-3" data-bs-toggle="modal" data-bs-target="#modalAgregarEvento">
+                    <i class="bi bi-plus-circle"></i> Agregar Evento
+                </button>
+            </div>
+
+            <!-- ÁREA PRINCIPAL -->
+            <div class="col-lg-9 col-md-8">
+                <!-- Controles -->
+                <div class="custom-card">
+                    <div class="row align-items-center g-3">
+                        <div class="col-md-4">
+                            <div class="btn-group btn-group-purple w-100" role="group">
+                                <button class="btn" onclick="semanaAnterior()">
+                                    <i class="bi bi-chevron-left"></i>
+                                </button>
+                                <button class="btn" onclick="semanaActual()">
+                                    Hoy
+                                </button>
+                                <button class="btn" onclick="semanaSiguiente()">
+                                    <i class="bi bi-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h5 class="mb-0" style="color: var(--dark-purple); font-weight: 700;">9 - 13 Febrero</h5>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="btn-group btn-group-purple w-100" role="group">
+                                <button class="btn active">Semana</button>
+                                <button class="btn">Mes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendario Semanal -->
+                <div class="custom-card">
+                    <div class="table-responsive">
+                        <table class="table calendar-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 70px;">Hora</th>
+                                    <th>Dom<br><small>08</small></th>
+                                    <th>Lun<br><small>09</small></th>
+                                    <th>Mar<br><small>10</small></th>
+                                    <th>Mié<br><small>11</small></th>
+                                    <th>Jue<br><small>12</small></th>
+                                    <th>Vie<br><small>13</small></th>
+                                    <th>Sáb<br><small>14</small></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="height: 50px;">
+                                    <td class="time-cell">7:00</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 50px;">
+                                    <td class="time-cell">8:00</td>
+                                    <td></td>
+                                    <td rowspan="2">
+                                        <div class="event-block event-materia1" onclick="abrirDetalleEvento('Clase Materia 1', 'Lunes 8:00 - 10:00 AM', 'Materia 1')">
+                                            <strong>Clase Materia 1</strong>
+                                            <small>8:00 - 10:00</small>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 50px;">
+                                    <td class="time-cell">9:00</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 50px;">
+                                    <td class="time-cell">10:00</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 50px;">
+                                    <td class="time-cell">11:00</td>
+                                    <td></td>
+                                    <td rowspan="2">
+                                        <div class="event-block event-materia2" onclick="abrirDetalleEvento('Clase Materia 2', 'Lunes 11:00 - 13:00', 'Materia 2')">
+                                            <strong>Clase Materia 2</strong>
+                                            <small>11:00 - 13:00</small>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td rowspan="2">
+                                        <div class="event-block event-materia2" onclick="abrirDetalleEvento('Clase Materia 2', 'Viernes 11:00 - 13:00', 'Materia 2')">
+                                            <strong>Clase Materia 2</strong>
+                                            <small>11:00 - 13:00</small>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 50px;">
+                                    <td class="time-cell">12:00</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 50px;">
+                                    <td class="time-cell">13:00</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 50px;">
+                                    <td class="time-cell">14:00</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td rowspan="2">
+                                        <div class="event-block event-materia3" onclick="abrirDetalleEvento('Clase Materia 3', 'Martes 14:00 - 16:00', 'Materia 3')">
+                                            <strong>Clase Materia 3</strong>
+                                            <small>14:00 - 16:00</small>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 50px;">
+                                    <td class="time-cell">15:00</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 50px;">
+                                    <td class="time-cell">16:00</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 50px;">
+                                    <td class="time-cell">17:00</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tabla de Eventos -->
+                <div class="custom-card">
+                    <div class="custom-card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-list-check"></i> Próximos Eventos</span>
+                        <span class="badge-purple">4 eventos</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table events-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Horario</th>
+                                    <th>Evento</th>
+                                    <th>Materia</th>
+                                    <th>Tipo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Lun, 09 Feb</strong></td>
+                                    <td>8:00 - 10:00</td>
+                                    <td>Clase Materia 1</td>
+                                    <td><span class="badge-materia1 badge-purple">Materia 1</span></td>
+                                    <td><span class="badge-clase badge-purple">Clase</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-purple-outline" onclick="abrirDetalleEvento('Clase Materia 1', 'Lunes 8:00 - 10:00', 'Materia 1')">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="eliminarEvento(this)">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Lun, 09 Feb</strong></td>
+                                    <td>11:00 - 13:00</td>
+                                    <td>Clase Materia 2</td>
+                                    <td><span class="badge-materia2 badge-purple">Materia 2</span></td>
+                                    <td><span class="badge-clase badge-purple">Clase</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-purple-outline" onclick="abrirDetalleEvento('Clase Materia 2', 'Lunes 11:00 - 13:00', 'Materia 2')">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="eliminarEvento(this)">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mar, 10 Feb</strong></td>
+                                    <td>14:00 - 16:00</td>
+                                    <td>Clase Materia 3</td>
+                                    <td><span class="badge-materia3 badge-purple">Materia 3</span></td>
+                                    <td><span class="badge-clase badge-purple">Clase</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-purple-outline" onclick="abrirDetalleEvento('Clase Materia 3', 'Martes 14:00 - 16:00', 'Materia 3')">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="eliminarEvento(this)">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Vie, 13 Feb</strong></td>
+                                    <td>11:00 - 13:00</td>
+                                    <td>Clase Materia 2</td>
+                                    <td><span class="badge-materia2 badge-purple">Materia 2</span></td>
+                                    <td><span class="badge-clase badge-purple">Clase</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-purple-outline" onclick="abrirDetalleEvento('Clase Materia 2', 'Viernes 11:00 - 13:00', 'Materia 2')">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="eliminarEvento(this)">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: AGREGAR EVENTO -->
+    <div class="modal fade" id="modalAgregarEvento" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-plus-circle"></i> Agregar Nuevo Evento
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAgregarEvento">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="custom-label">
+                                    <i class="bi bi-pencil"></i> Nombre del Evento *
+                                </label>
+                                <input type="text" class="custom-input" id="nombreEvento" required placeholder="Ej: Examen Final">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="custom-label">
+                                    <i class="bi bi-book"></i> Materia *
+                                </label>
+                                <select class="custom-select" id="materiaEvento" required>
+                                    <option value="">Selecciona una materia</option>
+                                    <option value="materia1">Clase Materia 1</option>
+                                    <option value="materia2">Clase Materia 2</option>
+                                    <option value="materia3">Clase Materia 3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="custom-label">
+                                    <i class="bi bi-tag"></i> Tipo de Evento *
+                                </label>
+                                <select class="custom-select" id="tipoEvento" required>
+                                    <option value="">Selecciona un tipo</option>
+                                    <option value="clase">Clase</option>
+                                    <option value="examen">Examen</option>
+                                    <option value="tarea">Tarea/Entrega</option>
+                                    <option value="evento">Evento especial</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="custom-label">
+                                    <i class="bi bi-calendar"></i> Fecha *
+                                </label>
+                                <input type="date" class="custom-input" id="fechaEvento" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="custom-label">
+                                    <i class="bi bi-clock"></i> Hora Inicio *
+                                </label>
+                                <input type="time" class="custom-input" id="horaInicio" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="custom-label">
+                                    <i class="bi bi-clock-history"></i> Hora Fin
+                                </label>
+                                <input type="time" class="custom-input" id="horaFin">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="custom-label">
+                                    <i class="bi bi-hourglass-split"></i> Duración (min)
+                                </label>
+                                <input type="number" class="custom-input" id="duracion" placeholder="120">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="custom-label">
+                                <i class="bi bi-geo-alt"></i> Ubicación
+                            </label>
+                            <input type="text" class="custom-input" id="ubicacion" placeholder="Ej: Aula 301">
+                        </div>
+                        <div class="mb-3">
+                            <label class="custom-label">
+                                <i class="bi bi-text-paragraph"></i> Descripción
+                            </label>
+                            <textarea class="custom-input" id="descripcionEvento" rows="3" placeholder="Información adicional"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="recordatorioEvento">
+                                    <label class="form-check-label" for="recordatorioEvento">
+                                        <i class="bi bi-bell"></i> Activar recordatorio
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="eventoRecurrente">
+                                    <label class="form-check-label" for="eventoRecurrente">
+                                        <i class="bi bi-arrow-repeat"></i> Evento recurrente
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-purple-outline" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </button>
+                    <button type="button" class="btn-purple" onclick="guardarEvento()">
+                        <i class="bi bi-check-circle"></i> Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: DETALLE DE EVENTO -->
+    <div class="modal fade" id="modalDetalleEvento" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-calendar-event"></i> Detalle del Evento
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3 pb-3 border-bottom">
+                        <label class="text-muted small mb-1">EVENTO:</label>
+                        <h5 id="detalleNombre" style="color: var(--dark-purple);"></h5>
+                    </div>
+                    <div class="mb-3 pb-3 border-bottom">
+                        <label class="text-muted small mb-1">
+                            <i class="bi bi-clock"></i> HORARIO:
+                        </label>
+                        <p id="detalleHorario" style="color: var(--dark-purple);"></p>
+                    </div>
+                    <div class="row mb-3 pb-3 border-bottom">
+                        <div class="col-6">
+                            <label class="text-muted small mb-1">
+                                <i class="bi bi-book"></i> MATERIA:
+                            </label>
+                            <p id="detalleMateria" style="color: var(--dark-purple);"></p>
+                        </div>
+                        <div class="col-6">
+                            <label class="text-muted small mb-1">
+                                <i class="bi bi-tag"></i> TIPO:
+                            </label>
+                            <p id="detalleTipo" style="color: var(--dark-purple);"></p>
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <label class="text-muted small mb-1">
+                            <i class="bi bi-text-paragraph"></i> DESCRIPCIÓN:
+                        </label>
+                        <p id="detalleDescripcion" class="text-muted"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-purple-outline" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Cerrar
+                    </button>
+                    <button type="button" class="btn-purple">
+                        <i class="bi bi-pencil"></i> Editar
+                    </button>
+                    <button type="button" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function guardarEvento() {
+            const form = document.getElementById('formAgregarEvento');
+            if (form.checkValidity()) {
+                alert('✓ Evento guardado exitosamente');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalAgregarEvento'));
+                modal.hide();
+                form.reset();
+            } else {
+                form.reportValidity();
+            }
+        }
+
+        function abrirDetalleEvento(nombre, horario, materia) {
+            document.getElementById('detalleNombre').textContent = nombre;
+            document.getElementById('detalleHorario').textContent = horario;
+            document.getElementById('detalleMateria').textContent = materia;
+            document.getElementById('detalleTipo').textContent = 'Clase presencial';
+            document.getElementById('detalleDescripcion').textContent = 'Sin descripción adicional.';
+            
+            const modal = new bootstrap.Modal(document.getElementById('modalDetalleEvento'));
+            modal.show();
+        }
+
+        function aplicarFiltros() {
+            const materia = document.getElementById('filtroMateria').value;
+            const tipo = document.getElementById('filtroTipo').value;
+            alert('Filtros aplicados:\nMateria: ' + (materia || 'Todas') + '\nTipo: ' + (tipo || 'Todos'));
+        }
+
+        function eliminarEvento(btn) {
+            if (confirm('¿Eliminar este evento?')) {
+                btn.closest('tr').remove();
+                alert('✓ Evento eliminado');
+            }
+        }
+
+        function mesAnterior() { alert('← Mes anterior'); }
+        function mesSiguiente() { alert('→ Mes siguiente'); }
+        function semanaAnterior() { alert('← Semana anterior'); }
+        function semanaActual() { alert('↻ Semana actual'); }
+        function semanaSiguiente() { alert('→ Semana siguiente'); }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('fechaEvento').value = new Date().toISOString().split('T')[0];
+        });
+    </script>
+</body>
+</html>
