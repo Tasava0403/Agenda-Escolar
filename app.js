@@ -185,10 +185,6 @@ function initRegistro() {
     // Modal "guardado"
     modalSaved?.show();
 
-    // Redirigir bonito después de 1 seg
-    setTimeout(() => {
-      window.location.href = "index.html";
-    }, 900);
   });
 }
 
