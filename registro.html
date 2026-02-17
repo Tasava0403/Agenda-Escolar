@@ -1,204 +1,110 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Agenda Escolar | Registrar tarea</title>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="diseños.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<style>
-  :root {
-    --primary-purple: #6B46C1;
-    --light-purple: #89e2ba;
-    --dark-purple: #553C9A;
-    --soft-lavender: #E9D8FD;
-    --bg-gradient-start: #E9D8FD;
-    --bg-gradient-end: #92E0BD;
-    --accent-purple: #805AD5;
-  }
-
-  body {
-    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
-    min-height: 100vh;
-    padding: 16px;
-    margin: 0;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  }
-
-  /* Contenedor principal */
-  .main-card {
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(5px);
-    border-radius: 24px;
-    box-shadow: 0 20px 40px rgba(86, 58, 150, 0.25);
-    padding: 25px;
-    margin: auto;
-    max-width: 600px;
-    border: 1px solid rgba(159, 122, 234, 0.3);
-  }
-
-  /* Título */
-  .edit-title {
-    color: var(--primary-purple);
-    font-weight: 700;
-  }
-
-  /* Tarjeta del formulario */
-  .edit-card {
-    background: white;
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 10px 25px rgba(86, 58, 150, 0.2);
-    border: 2px solid var(--soft-lavender);
-  }
-
-  /* Labels */
-  .edit-label {
-    font-weight: 600;
-    color: var(--dark-purple);
-    margin-bottom: 6px;
-  }
-
-  /* Inputs */
-  .edit-input {
-    border-radius: 12px;
-    border: 2px solid var(--soft-lavender);
-    padding: 10px 12px;
-    transition: all 0.25s ease;
-  }
-
-  .edit-input:focus {
-    border-color: var(--primary-purple);
-    box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.15);
-  }
-
-  /* Botón principal */
-  .btn-modify {
-    background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
-    color: white;
-    border: none;
-    padding: 14px;
-    border-radius: 50px;
-    font-weight: 600;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 20px rgba(86, 58, 150, 0.3);
-  }
-
-  .btn-modify:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(135deg, var(--dark-purple), var(--primary-purple));
-  }
-
-  /* Botón volver circular */
-  .btn-home {
-    background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 52px;
-    height: 52px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    box-shadow: 0 8px 20px rgba(86, 58, 150, 0.35);
-    transition: 0.3s;
-  }
-
-  .btn-home:hover {
-    transform: translateY(-2px) scale(1.05);
-  }
-</style>
-
 <body>
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="main-card" style="max-width: 700px; width: 100%;">
+            <div class="title-section text-center">
+                <h2>Ingrese sus datos</h2>
+            </div>
 
-  <main class="main-card">
+            <div class="edit-card">
+                <form id="registroForm">
+                    <div class="mb-3">
+                        <label for="nombre" class="edit-label">Nombre:</label>
+                        <input type="text" class="form-control edit-input" id="nombre" placeholder="Tu nombre" required>
+                    </div>
 
-    <!-- Botón volver -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="edit-title m-0">Registrar tarea</h2>
-      <a href="MuestraTareas.html" class="btn-home">←</a>
+                    <div class="mb-3">
+                        <label for="apellidos" class="edit-label">Apellidos:</label>
+                        <input type="text" class="form-control edit-input" id="apellidos" placeholder="Tus apellidos" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="correo" class="edit-label">Correo:</label>
+                        <input type="email" class="form-control edit-input" id="correo" placeholder="correo@ejemplo.com" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="nombreUsuario" class="edit-label">Nombre de usuario:</label>
+                        <input type="text" class="form-control edit-input" id="nombreUsuario" placeholder="Elige un nombre de usuario" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="edit-label">Genera una contraseña:</label>
+                        <input type="password" class="form-control edit-input" id="password" placeholder="Contraseña segura" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="edit-label">Confirma contraseña:</label>
+                        <input type="password" class="form-control edit-input" id="confirmPassword" placeholder="Repite la contraseña" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="semestre" class="edit-label">Semestre:</label>
+                        <input type="text" class="form-control edit-input" id="semestre" placeholder="Ej: Octavo" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="telefono" class="edit-label">Teléfono:</label>
+                        <input type="tel" class="form-control edit-input" id="telefono" placeholder="10 dígitos" required>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-modify">Registrar</button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <p class="edit-subtitle">
+                            ¿Ya tienes una cuenta? 
+                            <a href="index.html" style="color: #93109b;font-weight: 600;text-decoration: none;">Inicia Sesión</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <!-- Tarjeta de formulario -->
-    <div class="edit-card">
-      <form id="taskForm" class="needs-validation" novalidate>
-
-        <div class="mb-3">
-          <label class="edit-label">Materia</label>
-          <input id="materia" type="text" class="form-control edit-input" placeholder="Ej. Matemáticas" required>
-        </div>
-
-        <div class="mb-3">
-          <label class="edit-label">Fecha</label>
-          <input id="fecha" type="date" class="form-control edit-input" required>
-        </div>
-
-        <div class="mb-3">
-          <label class="edit-label">Tarea</label>
-          <input id="tarea" type="text" class="form-control edit-input" placeholder="Ej. Ejercicios pág 20" required>
-        </div>
-
-        <div class="mb-3">
-          <label class="edit-label">Estado</label>
-          <select id="estado" class="form-select edit-input" required>
-            <option value="Pendiente">Pendiente</option>
-            <option value="Hecho">Hecho</option>
-          </select>
-        </div>
-
-        <div class="mb-4">
-          <label class="edit-label">Nota (opcional)</label>
-          <input id="nota" type="text" class="form-control edit-input" placeholder="Ej. Entregar en clase / imprimir">
-        </div>
-
-        <button class="btn-modify w-100" type="submit"
-        onclick="mostrarModal('Materia Agregada Correctamente')">
-          Guardar tarea
-        </button>
-
-      </form>
-    </div>
-
-  </main>
-  <div id="contenedorModal"></div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="app.js"></script>
-  <script>
-    fetch("../modal.html")
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("contenedorModal").innerHTML = html;
-    });
-
-    fetch("../menuModal.html")
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("menu-container").innerHTML = html;
-      });
-
-    function mostrarModal(mensaje) {
-      const modalElement = document.getElementById('modalMensaje');
-      const texto = document.getElementById("textoModal");
-
-      if (!modalElement || !texto) return;
-
-      texto.textContent = mensaje;
-
-      const modal = new bootstrap.Modal(modalElement, {
-        backdrop: false,   // ❗ quita el fondo oscuro
-        keyboard: true
-      });
-
-      modal.show();
-      setTimeout(() => {
-        modal.hide();
-      }, 1500); 
-    }
-  </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('registroForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const nombre = document.getElementById('nombre').value;
+            
+            // Validar que las contraseñas coincidan
+            if (password !== confirmPassword) {
+                alert('Las contraseñas no coinciden');
+                return;
+            }
+            
+            // Validar que todos los campos estén llenos
+            const campos = ['nombre', 'apellidos', 'correo', 'nombreUsuario', 'password', 'semestre', 'telefono'];
+            let todosLlenos = true;
+            
+            campos.forEach(campo => {
+                if (!document.getElementById(campo).value) {
+                    todosLlenos = false;
+                }
+            });
+            
+           // if (todosLlenos) {
+                // Guardar el nombre para el modal de bienvenida
+                //localStorage.setItem('nombreUsuario', nombre);
+                // Redirigir a la página de agenda
+               // window.location.href = 'agenda.html';
+           // } else {
+            //    alert('Por favor completa todos los campos');
+           // }
+        });
+    </script>
 </body>
 </html>
