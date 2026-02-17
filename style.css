@@ -1,0 +1,28 @@
+:root{
+  --soft-bg: #f6f7fb;
+}
+
+.bg-soft{
+  background: linear-gradient(180deg, var(--soft-bg) 0%, #ffffff 60%);
+}
+
+.card{
+  border-radius: 16px;
+}
+
+.table thead th{
+  font-weight: 700;
+}
+
+.badge{
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+.btn{
+  border-radius: 12px;
+}
+
+input, select{
+  border-radius: 12px !important;
+}
