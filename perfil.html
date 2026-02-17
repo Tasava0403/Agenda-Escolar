@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Agenda Escolar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="main-card" style="max-width: 600px; width: 100%;">
+            <!-- Botón de regresar -->
+            <div class="text-end mb-3">
+                <button onclick="window.history.back()" class="btn-back">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Foto de perfil -->
+            <div class="text-center mb-4">
+                <div class="profile-picture-container">
+                    <img src="https://ui-avatars.com/api/?name=Usuario&size=150&background=6B46C1&color=fff&bold=true" 
+                         alt="Foto de perfil" 
+                         class="profile-picture" 
+                         id="profilePicture">
+                    <button class="edit-photo-btn" data-bs-toggle="modal" data-bs-target="#photoModal">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Formulario de perfil -->
+            <div class="profile-form">
+                <!-- Nombre Completo -->
+                <div class="profile-field">
+                    <label class="profile-label">Nombre Completo:</label>
+                    <div class="profile-input-group">
+                        <input type="text" 
+                               class="form-control profile-input" 
+                               id="nombreCompleto" 
+                               value="Garcia Martinez Karen" 
+                               readonly>
+                        <button class="btn-edit-field" onclick="editField('nombreCompleto')">Editar</button>
+                    </div>
+                </div>
+
+                <!-- Correo Electrónico -->
+                <div class="profile-field">
+                    <label class="profile-label">Correo Electrónico:</label>
+                    <div class="profile-input-group">
+                        <input type="email" 
+                               class="form-control profile-input" 
+                               id="correo" 
+                               value="l22458987@pachuca.tecnm.mx" 
+                               readonly>
+                        <button class="btn-edit-field" onclick="editField('correo')">Editar</button>
+                    </div>
+                </div>
+
+                <!-- Usuario -->
+                <div class="profile-field">
+                    <label class="profile-label">Usuario:</label>
+                    <div class="profile-input-group">
+                        <input type="text" 
+                               class="form-control profile-input" 
+                               id="usuario" 
+                               value="Karen" 
+                               readonly>
+                        <button class="btn-edit-field" onclick="editField('usuario')">Editar</button>
+                    </div>
+                </div>
+
+                <!-- Semestre -->
+                <div class="profile-field">
+                    <label class="profile-label">Semestre:</label>
+                    <div class="profile-input-group">
+                        <input type="text" 
+                               class="form-control profile-input" 
+                               id="semestre" 
+                               value="Octavo" 
+                               readonly>
+                        <button class="btn-edit-field" onclick="editField('semestre')">Editar</button>
+                    </div>
+                </div>
+
+                <!-- Teléfono -->
+                <div class="profile-field">
+                    <label class="profile-label">Teléfono:</label>
+                    <div class="profile-input-group">
+                        <input type="tel" 
+                               class="form-control profile-input" 
+                               id="telefono" 
+                               value="7756894533" 
+                               readonly>
+                        <button class="btn-edit-field" onclick="editField('telefono')">Editar</button>
+                    </div>
+                </div>
+
+                <!-- Botón Cambiar Contraseña -->
+                <div class="text-center mt-4">
+                    <button class="btn-change-password" data-bs-toggle="modal" data-bs-target="#passwordModal">
+                        Cambiar Contraseña
+                    </button>
+                </div>
+
+                <!-- Botón Cerrar Sesión -->
+                <div class="text-center mt-3">
+                    <button class="btn-logout" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cerrar Sesión -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px; border: 2px solid var(--soft-lavender);">
+                <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple)); border-radius: 18px 18px 0 0; border: none;">
+                    <h5 class="modal-title w-100 text-center" id="logoutModalLabel" style="color: white; font-weight: 700;">
+                        👋 Cerrar Sesión
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" style="padding: 30px;">
+                    <p style="font-size: 1.1rem; color: var(--dark-purple); font-weight: 500;">
+                        ¿Estás seguro de que deseas cerrar sesión?
+                    </p>
+                </div>
+                <div class="modal-footer" style="border: none; padding: 0 30px 30px 30px; justify-content: center; gap: 10px;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 25px; padding: 10px 25px;">Cancelar</button>
+                    <button type="button" class="btn btn-modify" onclick="confirmLogout()" style="margin: 0;">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cambiar Contraseña -->
+    <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px; border: 2px solid var(--soft-lavender);">
+                <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple)); border-radius: 18px 18px 0 0; border: none;">
+                    <h5 class="modal-title w-100 text-center" id="passwordModalLabel" style="color: white; font-weight: 700;">
+                        🔒 Cambiar Contraseña
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="padding: 30px;">
+                    <form id="passwordForm">
+                        <div class="mb-3">
+                            <label for="currentPassword" class="edit-label">Contraseña Actual:</label>
+                            <input type="password" class="form-control edit-input" id="currentPassword" placeholder="Ingresa tu contraseña actual" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="edit-label">Nueva Contraseña:</label>
+                            <input type="password" class="form-control edit-input" id="newPassword" placeholder="Ingresa tu nueva contraseña" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmNewPassword" class="edit-label">Confirmar Nueva Contraseña:</label>
+                            <input type="password" class="form-control edit-input" id="confirmNewPassword" placeholder="Confirma tu nueva contraseña" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" style="border: none; padding: 0 30px 30px 30px; justify-content: center; gap: 10px;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 25px; padding: 10px 25px;">Cancelar</button>
+                    <button type="button" class="btn btn-modify" onclick="saveNewPassword()" style="margin: 0;">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cambiar Foto de Perfil -->
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px; border: 2px solid var(--soft-lavender);">
+                <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple)); border-radius: 18px 18px 0 0; border: none;">
+                    <h5 class="modal-title w-100 text-center" id="photoModalLabel" style="color: white; font-weight: 700;">
+                        📷 Cambiar Foto de Perfil
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" style="padding: 30px;">
+                    <div class="mb-4">
+                        <img src="https://ui-avatars.com/api/?name=Usuario&size=150&background=6B46C1&color=fff&bold=true" 
+                             alt="Vista previa" 
+                             class="profile-picture" 
+                             id="photoPreview"
+                             style="width: 120px; height: 120px;">
+                    </div>
+                    <div class="mb-3">
+                        <label for="photoUpload" class="btn btn-modify" style="margin: 0; cursor: pointer;">
+                            📁 Seleccionar Archivo
+                            <input type="file" id="photoUpload" accept="image/*" style="display: none;" onchange="previewPhoto(event)">
+                        </label>
+                    </div>
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">
+                        Formatos aceptados: JPG, PNG, GIF (Máx. 5MB)
+                    </p>
+                </div>
+                <div class="modal-footer" style="border: none; padding: 0 30px 30px 30px; justify-content: center; gap: 10px;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 25px; padding: 10px 25px;">Cancelar</button>
+                    <button type="button" class="btn btn-modify" onclick="savePhoto()" style="margin: 0;">Guardar Foto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedPhotoURL = null;
+
+        // Función para editar campos
+        function editField(fieldId) {
+            const input = document.getElementById(fieldId);
+            const button = event.target;
+            
+            if (input.hasAttribute('readonly')) {
+                // Activar edición
+                input.removeAttribute('readonly');
+                input.focus();
+                input.select();
+                button.textContent = 'Guardar';
+                button.classList.add('saving');
+            } else {
+                // Guardar cambios (solo visual, no persiste)
+                input.setAttribute('readonly', true);
+                button.textContent = 'Editar';
+                button.classList.remove('saving');
+                
+                // NO guardamos nada - solo es visual
+                
+                // Mostrar mensaje de confirmación
+                showMessage('Cambios guardados (temporal)');
+            }
+        }
+
+        // Función para previsualizar foto
+        function previewPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Validar tamaño (5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('El archivo es demasiado grande. Máximo 5MB.');
+                    return;
+                }
+                
+                // Validar tipo
+                if (!file.type.startsWith('image/')) {
+                    alert('Por favor selecciona una imagen válida.');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedPhotoURL = e.target.result;
+                    document.getElementById('photoPreview').src = selectedPhotoURL;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Función para guardar foto
+        function savePhoto() {
+            if (selectedPhotoURL) {
+                document.getElementById('profilePicture').src = selectedPhotoURL;
+                // NO guardamos - solo temporal
+                
+                // Cerrar modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('photoModal'));
+                modal.hide();
+                
+                showMessage('Foto de perfil actualizada (temporal)');
+                selectedPhotoURL = null;
+            } else {
+                alert('Por favor selecciona una foto primero');
+            }
+        }
+
+        // Función para guardar nueva contraseña
+        function saveNewPassword() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
+            
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                alert('Las contraseñas nuevas no coinciden');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                alert('La contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+            
+            // NO guardamos - solo temporal
+            
+            // Limpiar formulario
+            document.getElementById('passwordForm').reset();
+            
+            // Cerrar modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('passwordModal'));
+            modal.hide();
+            
+            showMessage('Contraseña cambiada (temporal)');
+        }
+
+    // Función para cerrar sesión
+function confirmLogout() {
+    // Redirigir directamente al login
+    setTimeout(function() {
+        window.location.href = 'index.html';
+    }, 100);
+}
+
+        // Función para mostrar mensajes
+        function showMessage(message) {
+            // Crear elemento de mensaje
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'success-message';
+            messageDiv.textContent = message;
+            messageDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #6B46C1, #553C9A);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(107, 70, 193, 0.3);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(messageDiv);
+            
+            // Eliminar después de 3 segundos
+            setTimeout(() => {
+                messageDiv.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => messageDiv.remove(), 300);
+            }, 3000);
+        }
+    </script>
+
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    </style>
+</body>
+</html>
