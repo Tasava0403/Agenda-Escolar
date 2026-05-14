@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Agenda Escolar</title>
+  <link rel="icon" type="image/png" href="../calendario.png">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  
+</head>
+
+<body>
+
+  <div class="main-card">
+    <div id="menu-container"></div>
+    
+    <div class="title-section text-center">
+      <button class="btn-home" data-bs-toggle="modal"  data-bs-target="#modalMenu">
+      🏠
+    </button>
+      <h2>📚HORARIO ACTUAL</h2>
+    </div>
+
+    <div class="table-container">
+      <table class="table table-bordered text-center align-middle">
+        <thead class="text-white">
+          <tr>
+            <th>MATERIA</th>
+            <th>LUNES</th>
+            <th>MARTES</th>
+            <th>MIÉRCOLES</th>
+            <th>JUEVES</th>
+            <th>VIERNES</th>
+            <th>SÁBADO</th>
+            <th>ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div style="display: flex; justify-content: center">
+      <a
+        class="btn-modify"
+        style="background-color: #E65A19; color: white; padding: 10px 30px; margin-right: 5%;"
+        onclick="window.location.href='MuestraHorario.html'"
+        >
+        <b>↪️REGRESAR</b>
+      </a> 
+      <button
+        class="btn-modify"
+        style="background-color: #3E34CA; color: white; padding: 10px 30px;"
+        onclick="abrirModalNuevo()">
+          <b>📝AGREGAR</b>
+      </button>
+    </div>
+
+  <div class="edit-section mt-4">
+
+  <footer>
+    Términos y Condiciones @2026
+  </footer>
+  <div id="contenedorModalHor"></div>
+  <div id="contenedorModal"></div>
+
+<script src="ModificarHorario.js"></script>
+<script src="ModificarHorarioPostPut.js"></script>
+<script src="ModiHoravalidaciones.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const horas = [
+    "07:00:00", "08:00:00", "09:00:00", "10:00:00", "11:00:00", "12:00:00",
+    "13:00:00", "14:00:00", "15:00:00", "16:00:00", "17:00:00", "18:00:00",
+    "19:00:00", "20:00:00", "21:00:00", "22:00:00"
+];
+
+function llenarSelectsHora() {
+    document.querySelectorAll(".hora").forEach(select => {
+        select.innerHTML = "";
+
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "— Sin clase —"; // texto más claro
+        defaultOption.selected = true;
+        // ← Ya NO va disabled, así el usuario puede volver a seleccionarlo
+        select.appendChild(defaultOption);
+
+        horas.forEach(hora => {
+            const option = document.createElement("option");
+            option.value = hora;
+            option.textContent = hora.slice(0, 5); // muestra "07:00" en vez de "07:00:00"
+            select.appendChild(option);
+        });
+    });
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    // 1. Cargar menú
+    const menuRes = await fetch("/menuModal.html");
+    document.getElementById("menu-container").innerHTML = await menuRes.text();
+
+    // 2. Cargar modal — AQUÍ ya existe el contenedor
+    const modalRes = await fetch("/modal.html");
+    document.getElementById("contenedorModal").innerHTML = await modalRes.text();
+
+    // 2. Cargar modal — AQUÍ ya existe el contenedor
+    const modalHor = await fetch("/Horarios/ModalHorario.html");
+    document.getElementById("contenedorModalHor").innerHTML = await modalHor.text();
+
+    // 3. Llenar selects DESPUÉS de que el modal ya está en el DOM
+    llenarSelectsHora();
+
+    // 4. Verificar si hay ID en URL
+    const params = new URLSearchParams(window.location.search);
+    const idMateria = params.get("id");
+
+    if (idMateria) {
+        try {
+            const res = await fetch("http://localhost:8081/subjects/horariosbyUsuario?id=1");
+            const data = await res.json();
+            materiasGlobal = data.materiasResponses;
+            modificarMateria(parseInt(idMateria));
+        } catch (e) {
+            console.error("Error al cargar materia:", e);
+        }
+    }
+});
+
+function mostrarModal(mensaje) {
+    const modalElement = document.getElementById('modalMensaje');
+    const texto = document.getElementById("textoModal");
+    if (!modalElement || !texto) return;
+
+    const instanciaPrevia = bootstrap.Modal.getInstance(modalElement);
+    if (instanciaPrevia) instanciaPrevia.dispose();
+
+    texto.textContent = mensaje;
+    const modal = new bootstrap.Modal(modalElement, { backdrop: false, keyboard: true });
+    modal.show();
+    setTimeout(() => modal.hide(), 1500);
+}
+
+function mostrarModalHorario(esNuevo = false) {
+    const modalElement = document.getElementById('modalHorario');
+    if (!modalElement) return;
+
+    if (esNuevo) {          
+        idMateriaEditando = null;
+        limpiarFormulario();
+        limpiarErrores();
+    }
+
+    const instanciaPrevia = bootstrap.Modal.getInstance(modalElement);
+    if (instanciaPrevia) instanciaPrevia.dispose();
+
+    const modal = new bootstrap.Modal(modalElement, {
+        backdrop: false,
+        keyboard: true
+    });
+    modal.show();
+}
+</script>

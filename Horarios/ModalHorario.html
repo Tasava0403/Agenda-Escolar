@@ -1,0 +1,80 @@
+<div class="modal fade" id="modalHorario" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 820px; width: 820px;">
+        <div class="modal-content text-center" style="border-radius: 15px; overflow: hidden;">
+
+            <div class="modal-header justify-content-center"
+                style="background-color: #8f43e6; border-bottom: none;">
+                <h5 class="modal-title text-white w-100 text-center">Horario</h5>
+                <button type="button" class="btn-close btn-close-white position-absolute end-0 me-3"
+                        data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body" style="padding: 25px;">
+                <h3 class="edit-title">INGRESAR O MODIFICAR UNA NUEVA MATERIA</h3>
+
+                <div class="edit-card">
+                    <div class="mb-3">
+                        <label class="edit-label">Nombre de la materia</label>
+                        <input type="text" id="nombreMateria" placeholder="Ej: Matemáticas" class="form-control edit-input">
+                        <label id="alertMateria" class="text-danger" style="font-size: 12px; display: block;"></label>
+                    </div>
+                    <div class="mb-2">
+                        <label class="edit-label">Profesor asignado</label>
+                        <input type="text" id="nombreProfesor" placeholder="Ej: Juan Pérez" class="form-control edit-input">
+                        <label id="alertProfesor" class="text-danger" style="font-size: 12px; display: block;"></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla con scroll horizontal y ancho fijo 700px -->
+            <div class="px-3 pb-2" style="overflow-x: auto;">
+                <label id="alertTabla" class="text-danger" style="font-size: 12px; display: block;"></label>
+                <table class="table table-bordered text-center align-middle"
+                       id="tablaHorarios"
+                       style="min-width: 700px; font-size: 13px;">
+                    <thead class="text-white">
+                        <tr>
+                            <th style="background-color: #C595FC; width: 18%;">MATERIA</th>
+                            <th style="background-color: #C595FC;">LUN</th>
+                            <th style="background-color: #C595FC;">MAR</th>
+                            <th style="background-color: #C595FC;">MIÉ</th>
+                            <th style="background-color: #C595FC;">JUE</th>
+                            <th style="background-color: #C595FC;">VIE</th>
+                            <th style="background-color: #C595FC;">SÁB</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="fila-hora-inicio">
+                            <td><b>Hora inicial</b></td>
+                            <td><select class="hora form-select form-select-sm" data-dia="lunes"     data-tipo="inicio"></select></td>
+                            <td><select class="hora form-select form-select-sm" data-dia="martes"    data-tipo="inicio"></select></td>
+                            <td><select class="hora form-select form-select-sm" data-dia="miercoles" data-tipo="inicio"></select></td>
+                            <td><select class="hora form-select form-select-sm" data-dia="jueves"    data-tipo="inicio"></select></td>
+                            <td><select class="hora form-select form-select-sm" data-dia="viernes"   data-tipo="inicio"></select></td>
+                            <td><select class="hora form-select form-select-sm" data-dia="sabado"    data-tipo="inicio"></select></td>
+                        </tr>
+                        <tr class="fila-hora-fin">
+                            <td><b>Hora final</b></td>
+                            <td><select class="hora form-select form-select-sm" data-dia="lunes"     data-tipo="fin"></select></td>
+                            <td><select class="hora form-select form-select-sm" data-dia="martes"    data-tipo="fin"></select></td>
+                            <td><select class="hora form-select form-select-sm" data-dia="miercoles" data-tipo="fin"></select></td>
+                            <td><select class="hora form-select form-select-sm" data-dia="jueves"    data-tipo="fin"></select></td>
+                            <td><select class="hora form-select form-select-sm" data-dia="viernes"   data-tipo="fin"></select></td>
+                            <td><select class="hora form-select form-select-sm" data-dia="sabado"    data-tipo="fin"></select></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-flex justify-content-center gap-4 my-4">
+                <button class="btn-modify"
+                        style="background-color: #3E34CA; color: white; padding: 10px 30px;"
+                        onclick="guardarMateria()">
+                    <b>📝GUARDAR CAMBIOS</b>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
