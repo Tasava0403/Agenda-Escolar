@@ -64,6 +64,7 @@
   </footer>
   <div id="contenedorModalHor"></div>
   <div id="contenedorModal"></div>
+  <div id="contenedorModalEliminar"></div>
 
 <script src="ModificarHorario.js"></script>
 <script src="ModificarHorarioPostPut.js"></script>
@@ -111,6 +112,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const modalHor = await fetch("/Horarios/ModalHorario.html");
     document.getElementById("contenedorModalHor").innerHTML = await modalHor.text();
 
+    // 4. Cargar modal de confirmación de eliminar
+    const modalEli = await fetch("/Horarios/ModalEliminar.html");
+    document.getElementById("contenedorModalEliminar").innerHTML = await modalEli.text();
+
     // 3. Llenar selects DESPUÉS de que el modal ya está en el DOM
     llenarSelectsHora();
 
@@ -120,7 +125,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (idMateria) {
         try {
-            const res = await fetch("http://localhost:8081/subjects/horariosbyUsuario?id=1");
+            const res = await fetch("http://localhost:8080/subjects/horariosbyUsuario?id=1");
             const data = await res.json();
             materiasGlobal = data.materiasResponses;
             modificarMateria(parseInt(idMateria));
@@ -163,4 +168,18 @@ function mostrarModalHorario(esNuevo = false) {
     });
     modal.show();
 }
+
+ function mostrarModalEliminar() {
+        const modalElement = document.getElementById("modalConfirmarEliminar");
+        if (!modalElement) return;
+        
+        const instanciaPrevia = bootstrap.Modal.getInstance(modalElement);
+        if (instanciaPrevia) instanciaPrevia.dispose();
+        
+        const modal = new bootstrap.Modal(modalElement, {
+            backdrop: false,
+            keyboard: true
+        });
+        modal.show();
+    }
 </script>

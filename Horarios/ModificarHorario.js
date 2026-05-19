@@ -84,25 +84,35 @@ function abrirModalNuevo() {
     mostrarModalHorario();
 }
 
+
+// Función eliminar con modal de confirmación
 async function eliminarMateria(idMateria) {
-    const confirmar = confirm("¿Deseas eliminar esta materia?");
-    if (!confirmar) return;
+    // Mostrar modal de confirmación
+    mostrarModalEliminar();
+    
+    // Configurar el botón de confirmar
+    document.getElementById("btnConfirmarEliminar").onclick = async () => {
+        // Cerrar el modal
+        const modalElement = document.getElementById("modalConfirmarEliminar");
+        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (modalInstance) modalInstance.hide();
 
-    try {
-        const response = await fetch(
-            `http://localhost:8080/subjects/deleteMateria?id_materia=${idMateria}&id_usuario=1`,
-            { method: "DELETE" }
-        );
+        try {
+            const response = await fetch(
+                `http://localhost:8080/subjects/deleteMateria?id_materia=${idMateria}&id_usuario=1`,
+                { method: "DELETE" }
+            );
 
-        if (!response.ok) {
-            throw new Error("No se pudo eliminar la materia");
+            if (!response.ok) {
+                throw new Error("No se pudo eliminar la materia");
+            }
+
+            mostrarModal("✅ Materia eliminada correctamente");
+            cargarHorario();
+
+        } catch (error) {
+            console.error("Error al eliminar:", error);
+            mostrarModal(`❌ ${error.message}`);
         }
-
-        mostrarModal("✅ Materia eliminada correctamente");
-        cargarHorario();
-
-    } catch (error) {
-        console.error("Error al eliminar:", error);
-        mostrarModal(`❌ ${error.message}`);
-    }
+    };
 }
