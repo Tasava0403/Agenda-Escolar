@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="main-card" style="max-width: 700px; width: 100%;">
@@ -24,37 +26,44 @@
 
                     <div class="mb-3">
                         <label for="apellidos" class="edit-label">Apellidos:</label>
-                        <input type="text" class="form-control edit-input" id="apellidos" placeholder="Tus apellidos" required>
+                        <input type="text" class="form-control edit-input" id="apellidos" placeholder="Tus apellidos"
+                            required>
                     </div>
 
                     <div class="mb-3">
                         <label for="correo" class="edit-label">Correo:</label>
-                        <input type="email" class="form-control edit-input" id="correo" placeholder="correo@ejemplo.com" required>
+                        <input type="email" class="form-control edit-input" id="correo" placeholder="correo@ejemplo.com"
+                            required>
                     </div>
 
                     <div class="mb-3">
                         <label for="nombreUsuario" class="edit-label">Nombre de usuario:</label>
-                        <input type="text" class="form-control edit-input" id="nombreUsuario" placeholder="Elige un nombre de usuario" required>
+                        <input type="text" class="form-control edit-input" id="nombreUsuario"
+                            placeholder="Elige un nombre de usuario" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="password" class="edit-label">Genera una contraseña:</label>
-                        <input type="password" class="form-control edit-input" id="password" placeholder="Contraseña segura" required>
+                        <input type="password" class="form-control edit-input" id="password"
+                            placeholder="Contraseña segura" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="confirmPassword" class="edit-label">Confirma contraseña:</label>
-                        <input type="password" class="form-control edit-input" id="confirmPassword" placeholder="Repite la contraseña" required>
+                        <input type="password" class="form-control edit-input" id="confirmPassword"
+                            placeholder="Repite la contraseña" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="semestre" class="edit-label">Semestre:</label>
-                        <input type="text" class="form-control edit-input" id="semestre" placeholder="Ej: Octavo" required>
+                        <input type="text" class="form-control edit-input" id="semestre" placeholder="Ej: Octavo"
+                            required>
                     </div>
 
                     <div class="mb-3">
                         <label for="telefono" class="edit-label">Teléfono:</label>
-                        <input type="tel" class="form-control edit-input" id="telefono" placeholder="10 dígitos" required>
+                        <input type="tel" class="form-control edit-input" id="telefono" placeholder="10 dígitos"
+                            required>
                     </div>
 
                     <div class="text-center">
@@ -63,8 +72,9 @@
 
                     <div class="text-center mt-3">
                         <p class="edit-subtitle">
-                            ¿Ya tienes una cuenta? 
-                            <a href="index.html" style="color: #93109b;font-weight: 600;text-decoration: none;">Inicia Sesión</a>
+                            ¿Ya tienes una cuenta?
+                            <a href="index.html" style="color: #93109b;font-weight: 600;text-decoration: none;">Inicia
+                                Sesión</a>
                         </p>
                     </div>
                 </form>
@@ -74,38 +84,89 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.getElementById('registroForm').addEventListener('submit', function(e) {
+        const API_BASE = 'http://localhost:8081';
+
+        document.getElementById('registroForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+            ocultarMensaje();
+
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
-            const nombre = document.getElementById('nombre').value;
-            
+
             // Validar que las contraseñas coincidan
             if (password !== confirmPassword) {
-                alert('Las contraseñas no coinciden');
+                mostrarMensaje('Las contraseñas no coinciden.', 'danger');
                 return;
             }
-            
+
             // Validar que todos los campos estén llenos
             const campos = ['nombre', 'apellidos', 'correo', 'nombreUsuario', 'password', 'semestre', 'telefono'];
-            let todosLlenos = true;
-            
-            campos.forEach(campo => {
-                if (!document.getElementById(campo).value) {
-                    todosLlenos = false;
+            const vacio = campos.find(c => !document.getElementById(c).value.trim());
+            if (vacio) {
+                mostrarMensaje('Por favor completa todos los campos.', 'danger');
+                return;
+            }
+
+            const semestreVal = parseInt(document.getElementById('semestre').value);
+            if (isNaN(semestreVal) || semestreVal < 1 || semestreVal > 12) {
+                mostrarMensaje('El semestre debe ser un número entre 1 y 12.', 'danger');
+                return;
+            }
+
+            const datos = {
+                nombre: document.getElementById('nombre').value.trim(),
+                apellidos: document.getElementById('apellidos').value.trim(),
+                correo: document.getElementById('correo').value.trim(),
+                usuario: document.getElementById('nombreUsuario').value.trim(),
+                contraseña: password,
+                semestre: semestreVal,
+                telefono: document.getElementById('telefono').value.trim()
+            };
+
+            const btnRegistrar = e.target.querySelector('button[type="submit"]');
+            btnRegistrar.disabled = true;
+            btnRegistrar.textContent = 'Registrando...';
+
+            try {
+                const res = await fetch(`${API_BASE}/usuarios`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datos)
+                });
+                const data = await res.json();
+
+                if (data.exito) {
+                    mostrarMensaje('¡Registro exitoso! Redirigiendo al inicio de sesión...', 'success');
+                    setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+                } else {
+                    mostrarMensaje(data.mensaje || 'Error al registrar. Intenta de nuevo.', 'danger');
                 }
-            });
-            
-           // if (todosLlenos) {
-                // Guardar el nombre para el modal de bienvenida
-                //localStorage.setItem('nombreUsuario', nombre);
-                // Redirigir a la página de agenda
-               // window.location.href = 'agenda.html';
-           // } else {
-            //    alert('Por favor completa todos los campos');
-           // }
+            } catch (err) {
+                console.error(err);
+                mostrarMensaje('No se pudo conectar con el servidor. Verifica que Spring Boot esté activo.', 'danger');
+            } finally {
+                btnRegistrar.disabled = false;
+                btnRegistrar.textContent = 'Registrar';
+            }
         });
+
+        function mostrarMensaje(msg, tipo) {
+            let alerta = document.getElementById('registroMsg');
+            if (!alerta) {
+                alerta = document.createElement('div');
+                alerta.id = 'registroMsg';
+                document.getElementById('registroForm').prepend(alerta);
+            }
+            alerta.className = `alert alert-${tipo} text-center`;
+            alerta.textContent = msg;
+            alerta.style.display = 'block';
+        }
+
+        function ocultarMensaje() {
+            const alerta = document.getElementById('registroMsg');
+            if (alerta) alerta.style.display = 'none';
+        }
     </script>
 </body>
+
 </html>

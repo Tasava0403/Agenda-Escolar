@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="icon" type="image/png" href="calendario.png">
+    <link rel="icon" type="image/png" href="Calendario/calendario.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="main-card" style="max-width: 600px; width: 100%;">
@@ -19,12 +21,14 @@
                 <form id="loginForm">
                     <div class="mb-4">
                         <label for="usuario" class="edit-label">Usuario:</label>
-                        <input type="text" class="form-control edit-input" id="usuario" placeholder="Ingresa tu usuario" required>
+                        <input type="text" class="form-control edit-input" id="usuario" placeholder="Ingresa tu usuario"
+                            required>
                     </div>
 
                     <div class="mb-4">
                         <label for="contrasena" class="edit-label">Contraseña:</label>
-                        <input type="password" class="form-control edit-input" id="contrasena" placeholder="Ingresa tu contraseña" required>
+                        <input type="password" class="form-control edit-input" id="contrasena"
+                            placeholder="Ingresa tu contraseña" required>
                     </div>
 
                     <div class="text-center">
@@ -33,8 +37,9 @@
 
                     <div class="text-center mt-3">
                         <p class="edit-subtitle">
-                            ¿No tienes una cuenta? 
-                            <a href="registro.html" style="color: #93109b;font-weight: 600;text-decoration: none;">Regístrate aquí.</a>
+                            ¿No tienes una cuenta?
+                            <a href="registro.html"
+                                style="color: #93109b;font-weight: 600;text-decoration: none;">Regístrate aquí.</a>
                         </p>
                     </div>
                 </form>
@@ -44,18 +49,60 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        const API_BASE = 'http://localhost:8081';
+
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-            const usuario = document.getElementById('usuario').value;
+
+            const usuario = document.getElementById('usuario').value.trim();
             const contrasena = document.getElementById('contrasena').value;
-            
-            if (usuario && contrasena) {
-                // Guardar el nombre del usuario en localStorage para el modal de bienvenida
-                localStorage.setItem('nombreUsuario', usuario);
-                // Redirigir a la página de agenda
-                window.location.href = 'calendario.html';
+            const btnLogin = e.target.querySelector('button[type="submit"]');
+
+            if (!usuario || !contrasena) return;
+
+            // Estado de carga
+            btnLogin.disabled = true;
+            btnLogin.textContent = 'Verificando...';
+
+            try {
+                const res = await fetch(`${API_BASE}/usuarios/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, contraseña: contrasena })
+                });
+
+                const data = await res.json();
+
+                if (data.exito) {
+                    // Guardar datos de sesión en localStorage
+                    localStorage.setItem('usuarioId', data.usuario.id_usuario);
+                    localStorage.setItem('nombreUsuario', data.usuario.usuario);
+                    // Redirigir al calendario
+                    window.location.href = 'Calendario/calendario.html';
+                } else {
+                    mostrarError(data.mensaje || 'Usuario o contraseña incorrectos.');
+                }
+            } catch (err) {
+                console.error(err);
+                mostrarError('No se pudo conectar con el servidor. Verifica que Spring Boot esté activo.');
+            } finally {
+                btnLogin.disabled = false;
+                btnLogin.textContent = 'Iniciar';
             }
         });
+
+        function mostrarError(msg) {
+            let alerta = document.getElementById('loginError');
+            if (!alerta) {
+                alerta = document.createElement('div');
+                alerta.id = 'loginError';
+                alerta.className = 'alert alert-danger mt-3 text-center';
+                document.getElementById('loginForm').appendChild(alerta);
+            }
+            alerta.textContent = msg;
+            alerta.style.display = 'block';
+        }
     </script>
 </body>
+
 </html>
