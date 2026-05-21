@@ -1,211 +1,239 @@
 const API_URL = "http://localhost:8080/tareas";
 
-// ==========================
-// FORMATEAR FECHA
-// ==========================
-function formatearFecha(fechaISO) {
+let tareas = [];
 
-  const fecha = new Date(fechaISO);
-
-  return fecha.toLocaleDateString("es-MX");
-
-}
-
-// ==========================
-// BADGE ESTADO
-// ==========================
-function badgeEstado(estado) {
-
-  return estado === "Hecho" || estado === "Completado"
-    ? '<span class="badge text-bg-success">Completado</span>'
-    : '<span class="badge text-bg-warning">Pendiente</span>';
-
-}
-
-// ==========================
-// MENSAJE SIN TAREAS
-// ==========================
-function mostrarSinTareas(visible) {
-
-  document.getElementById("sinTareas")
-    .classList.toggle("d-none", !visible);
-
-}
-
-// ==========================
+// =======================
 // CARGAR TAREAS
-// ==========================
+// =======================
 async function cargarTareas() {
 
-  try {
+    try {
 
-    const response = await fetch(API_URL);
+        const response = await fetch(API_URL);
 
-    const tareas = await response.json();
+        if (!response.ok) {
+            throw new Error("Error al obtener tareas");
+        }
 
-    console.log(tareas);
+        tareas = await response.json();
 
-    renderTabla(tareas);
+        renderTabla();
 
-  } catch (error) {
+    } catch (error) {
 
-    console.error("Error al cargar tareas:", error);
+        console.error("Error cargando tareas:", error);
 
-  }
+        mostrarMensaje("Error cargando tareas");
+
+    }
 }
 
-// ==========================
-// RENDER TABLA
-// ==========================
-function renderTabla(tareas, filtro = "") {
+// =======================
+// MOSTRAR TABLA
+// =======================
+function renderTabla(filtro = "") {
 
-  const tbody = document.getElementById("tablaTareasBody");
+    const tbody = document.getElementById("tablaTareasBody");
 
-  const filtroLower = filtro.toLowerCase();
+    const filtroLower = filtro.toLowerCase();
 
-  const tareasFiltradas = tareas.filter(t =>
+    const tareasFiltradas = tareas.filter(t =>
 
-    (t.descripcion || "")
-      .toLowerCase()
-      .includes(filtroLower)
+        t.descripcion.toLowerCase().includes(filtroLower)
 
-  );
+    );
 
-  tbody.innerHTML = tareasFiltradas.map(t => `
+    tbody.innerHTML = "";
 
-    <tr>
+    tareasFiltradas.forEach(t => {
 
-      <td>${t.idMateria}</td>
+        tbody.innerHTML += `
 
-      <td>${t.descripcion}</td>
+            <tr>
 
-      <td>${formatearFecha(t.fecha)}</td>
+                <td>${t.idMateria}</td>
 
-      <td>${badgeEstado(t.estado)}</td>
+                <td>${t.descripcion}</td>
 
-      <td class="text-nowrap">
+                <td>${formatearFecha(t.fecha)}</td>
 
-  <!-- BOTON VER -->
-  <button
-    class="btn btn-primary btn-sm btn-ver"
-    data-id="${t.idTarea}"
-    data-descripcion="${t.descripcion}"
-    data-fecha="${formatearFecha(t.fecha)}"
-    data-estado="${t.estado}"
-    data-materia="${t.idMateria}"
-    data-bs-toggle="modal"
-    data-bs-target="#modalVer">
+                <td>
+                    ${badgeEstado(t.estado)}
+                </td>
 
-    Ver
+                <td class="text-nowrap">
 
-  </button>
+                    <!-- VER -->
+                    <button
+                        class="btn btn-primary btn-sm"
+                        onclick="verTarea(${t.idTarea})"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalVer">
 
-  <!-- BOTON EDITAR -->
-  <a
-    href="editarTarea.html?id=${t.idTarea}"
-    class="btn btn-warning btn-sm ms-2">
+                        Ver
 
-    Editar
+                    </button>
 
-  </a>
+                    <!-- EDITAR -->
+                    <button
+                        class="btn btn-warning btn-sm ms-2"
+                        onclick="editarTarea(${t.idTarea})">
 
-  <!-- BOTON BORRAR -->
-  <button
-    class="btn btn-danger btn-sm ms-2 btn-borrar"
-    data-id="${t.idTarea}">
+                        Editar
 
-    Borrar
+                    </button>
 
-  </button>
+                    <!-- ELIMINAR -->
+                    <button
+                        class="btn btn-danger btn-sm ms-2"
+                        onclick="eliminarTarea(${t.idTarea})">
 
-</td>
+                        Borrar
 
-    </tr>
+                    </button>
 
-  `).join("");
+                </td>
 
-  mostrarSinTareas(tareas.length === 0);
+            </tr>
 
-  // ==========================
-  // BOTON VER
-  // ==========================
-  document.querySelectorAll(".btn-ver").forEach(btn => {
-
-    btn.addEventListener("click", () => {
-
-      document.getElementById("verMateria").textContent =
-        btn.dataset.materia;
-
-      document.getElementById("verTarea").textContent =
-        btn.dataset.descripcion;
-
-      document.getElementById("verFecha").textContent =
-        btn.dataset.fecha;
-
-      document.getElementById("verEstado").textContent =
-        btn.dataset.estado;
-
+        `;
     });
 
-  });
+    mostrarSinTareas(tareasFiltradas.length === 0);
+}
 
-  // ==========================
-  // BOTON BORRAR
-  // ==========================
-  document.querySelectorAll(".btn-borrar").forEach(btn => {
+// =======================
+// BADGE ESTADO
+// =======================
+function badgeEstado(estado) {
 
-    btn.addEventListener("click", async () => {
+    return estado === "Hecho" || estado === "Completado"
 
-      const id = btn.dataset.id;
+        ? '<span class="badge bg-success">Hecho</span>'
 
-      try {
+        : '<span class="badge bg-warning text-dark">Pendiente</span>';
+}
 
-        await fetch(`${API_URL}/${id}`, {
-          method: "DELETE"
+// =======================
+// FORMATEAR FECHA
+// =======================
+function formatearFecha(fecha) {
+
+    const d = new Date(fecha);
+
+    return d.toLocaleDateString();
+}
+
+// =======================
+// MOSTRAR MENSAJE VACÍO
+// =======================
+function mostrarSinTareas(visible) {
+
+    document
+        .getElementById("sinTareas")
+        .classList.toggle("d-none", !visible);
+}
+
+// =======================
+// VER TAREA
+// =======================
+function verTarea(id) {
+
+    const tarea = tareas.find(t => t.idTarea === id);
+
+    if (!tarea) return;
+
+    document.getElementById("verMateria").textContent =
+        tarea.idMateria;
+
+    document.getElementById("verTarea").textContent =
+        tarea.descripcion;
+
+    document.getElementById("verFecha").textContent =
+        formatearFecha(tarea.fecha);
+
+    document.getElementById("verEstado").textContent =
+        tarea.estado;
+}
+
+// =======================
+// EDITAR
+// =======================
+function editarTarea(id) {
+
+    window.location.href =
+        `editarTarea.html?id=${id}`;
+}
+
+// =======================
+// ELIMINAR
+// =======================
+async function eliminarTarea(id) {
+
+    const confirmar = confirm("¿Eliminar tarea?");
+
+    if (!confirmar) return;
+
+    try {
+
+        const response = await fetch(`${API_URL}/${id}`, {
+
+            method: "DELETE"
+
         });
 
-        cargarTareas();
+        if (response.ok) {
 
-      } catch (error) {
+            mostrarMensaje("Tarea eliminada");
 
-        console.error("Error al borrar tarea:", error);
+            cargarTareas();
 
-      }
+        } else {
 
-    });
+            mostrarMensaje("No se pudo eliminar");
 
-  });
+        }
 
+    } catch (error) {
+
+        console.error("Error eliminando:", error);
+
+        mostrarMensaje("Error eliminando tarea");
+
+    }
 }
 
-// ==========================
-// DOM READY
-// ==========================
+// =======================
+// MENSAJE SIMPLE
+// =======================
+function mostrarMensaje(texto) {
+
+    alert(texto);
+}
+
+// =======================
+// BUSCADOR
+// =======================
 document.addEventListener("DOMContentLoaded", () => {
 
-  cargarTareas();
+    cargarTareas();
 
-  document.getElementById("buscador")
-    .addEventListener("input", async e => {
+    // BUSCADOR
+    document
+        .getElementById("buscador")
+        .addEventListener("input", e => {
 
-      const response = await fetch(API_URL);
+            renderTabla(e.target.value);
 
-      const tareas = await response.json();
+        });
 
-      renderTabla(tareas, e.target.value);
+    // MENU
+    fetch("menuModal.html")
+        .then(res => res.text())
+        .then(html => {
 
-    });
+            document.getElementById("menu-container").innerHTML = html;
 
-  // ==========================
-  // MENU MODAL
-  // ==========================
-  fetch("menuModal.html")
-    .then(res => res.text())
-    .then(html => {
-
-      document.getElementById("menu-container")
-        .innerHTML = html;
-
-    });
+        });
 
 });
