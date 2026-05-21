@@ -52,7 +52,7 @@ document.getElementById("formEditar")
         document.getElementById("nota").value,
 
       idUsuario: 1,
-      idMateria: 1
+      idMateria: 4
 
     };
 

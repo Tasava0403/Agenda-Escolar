@@ -42,7 +42,7 @@ document
     const tarea = {
 
       idUsuario: 1,
-      idMateria: 1,
+      idMateria: 4,
 
       descripcion: descripcion,
       fecha: fecha,
@@ -64,6 +64,11 @@ document
         body: JSON.stringify(tarea)
 
       });
+
+      console.log("STATUS:", response.status);
+
+      const texto = await response.text();
+      console.log(texto);
 
       // SI TODO SALE BIEN
       if (response.ok) {
