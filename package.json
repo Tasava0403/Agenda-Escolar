@@ -1,0 +1,12 @@
+{
+  "name": "agenda-escolar",
+  "version": "1.0.0",
+  "description": "Agenda escolar y calendario de tareas",
+  "scripts": {
+    "dev": "npx serve",
+    "start": "npx serve"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}
